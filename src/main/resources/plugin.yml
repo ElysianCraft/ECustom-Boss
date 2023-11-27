@@ -1,0 +1,9 @@
+name: elysian-boss
+version: '${version}'
+main: fr.elysiancraft.boss.Boss
+api-version: '1.20'
+author: Cleboost
+commands:
+  axolotboss:
+    description: Spawn the axolotl boss
+    permission: elysian.spawnboss
