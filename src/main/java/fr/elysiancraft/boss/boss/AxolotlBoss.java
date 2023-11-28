@@ -55,7 +55,6 @@ public class AxolotlBoss extends BossBase {
         this.lastPlayer = player;
         player.sendMessage("Merci de m'avoir nourrit !");
         if (this.getHunger() >= 100) {
-            this.waitTime(1000);
             player.sendMessage("Je te donne ce cadeau !");
             ItemStack branchiflore = new ItemStack(Material.DRIED_KELP);
             branchiflore.setAmount(1);
