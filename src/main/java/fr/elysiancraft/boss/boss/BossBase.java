@@ -56,10 +56,4 @@ public class BossBase {
                 type
         );
     }
-
-
-    //Utils methods
-    public void waitTime(Integer ms) {
-        //Thread.sleep(ms);
-    }
 }
