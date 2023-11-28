@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
@@ -25,10 +26,7 @@ public class AxolotlBoss extends BossBase {
         axolotl.setAgeLock(true);
         axolotl.setPersistent(true);
         axolotl.setCollidable(false);
-        /*axolotl.getPersistentDataContainer().set(new NamespacedKey(Boss.getInstance(), "tempsFin"),
-                PersistentDataType.INTEGER,
-                0
-        );*/
+
         this.setEntity(axolotl);
         this.setData("hunger", PersistentDataType.INTEGER, 0);
     }
@@ -83,14 +81,27 @@ public class AxolotlBoss extends BossBase {
             return;
         }
         player.sendMessage("Je suis coinc\u00E9 ici depuis longtemps, j'ai faim ...");
-        this.waitTime(1000);
-        player.sendMessage("J'ai, très faim, t'aurais pas de la morue ??");
-        int oldHunger = this.getHunger();
-        this.waitTime(5000);
-        if (this.getHunger() <= oldHunger) {
-            player.sendMessage("Dans ce cas je vais TE manger !");
-            this.eatPlayer(player);
-        }
+        BukkitRunnable foodRequest = new BukkitRunnable() {
+
+            private int oldHunger = getHunger();
+            @Override
+            public void run() {
+                player.sendMessage("J'ai, tr\u00E8s faim, t'aurais pas de la morue ??");
+                checkFoodGive.runTaskLater(Boss.getInstance(), 20 * 5);
+            }
+
+            final BukkitRunnable checkFoodGive = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (getHunger() <= oldHunger) {
+                        player.sendMessage("Dans ce cas je vais TE manger !");
+                        eatPlayer(player);
+                    }
+                }
+            };
+        };
+
+        foodRequest.runTaskLater(Boss.getInstance(), 20 * 5);
     }
 
     public void setHunger(int hunger) {
@@ -104,7 +115,7 @@ public class AxolotlBoss extends BossBase {
     private void eatPlayer(Player player) {
         if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
         this.getEntity().attack(player);
-        player.damage(10000, this.getEntity());
+        player.setHealth(0);
         this.setHunger(this.getHunger() + 5);
     }
 }
