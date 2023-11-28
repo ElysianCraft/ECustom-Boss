@@ -1,4 +1,4 @@
-name: elysian-boss
+name: ECustom-Boss
 version: '${version}'
 main: fr.elysiancraft.boss.Boss
 api-version: '1.20'
@@ -7,3 +7,8 @@ commands:
   axolotboss:
     description: Spawn the axolotl boss
     permission: elysian.spawnboss
+
+permissions:
+    elysian.spawnboss:
+        description: Allow to spawn the boss
+        default: op
